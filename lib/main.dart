@@ -1,30 +1,33 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:state_playground/model/CounterModel.dart';
+
+import 'data/Counter.dart';
 
 void main() => runApp(MyApp());
 
-class Counter with ChangeNotifier {
-  int _count = 0;
-  int get count => _count;
-
-  void increment() {
-    _count++;
-    notifyListeners();
-  }
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
 }
 
-class MyApp extends StatelessWidget {
+class _MyAppState extends State<MyApp> {
+  final _counterModel = CounterModel();
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(builder: (_) => Counter()),
+        Provider.value(value: _counterModel),
+        StreamProvider(
+          builder: (BuildContext context) {
+            return _counterModel.getCount();
+          },
+        ),
       ],
       child: Consumer<Counter>(
         builder: (context, counter, _) {
           return MaterialApp(
-            supportedLocales: const [Locale('en')],
             home: const MyHomePage(),
           );
         },
@@ -52,7 +55,7 @@ class IncrementCounterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: Provider.of<Counter>(context).increment,
+      onPressed: Provider.of<CounterModel>(context).increment,
       tooltip: 'Increment',
       child: const Icon(Icons.add),
     );
