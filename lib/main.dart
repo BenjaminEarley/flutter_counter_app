@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:state_playground/model/CounterModel.dart';
+import 'package:counter/model/CounterModel.dart';
 
 import 'data/Counter.dart';
 

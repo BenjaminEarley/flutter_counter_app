@@ -1,5 +1,5 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:state_playground/data/Counter.dart';
+import 'package:counter/data/Counter.dart';
 
 abstract class ICounterModel {
   void increment();

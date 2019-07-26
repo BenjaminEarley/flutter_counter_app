@@ -1,6 +1,6 @@
-# state_playground
+# counter
 
-A new Flutter project.
+Simple Counter App using behaviors.
 
 ## Getting Started
 
