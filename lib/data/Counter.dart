@@ -1,9 +1,11 @@
-class Counter {
-  int _count;
-  Counter(int count) : _count = count;
-  int get count => _count;
+import 'package:equatable/equatable.dart';
+
+class Counter extends Equatable {
+  final int count;
+
+  Counter(this.count) : super([count]);
 
   Counter increment() {
-    return Counter(_count + 1);
+    return Counter(count + 1);
   }
 }

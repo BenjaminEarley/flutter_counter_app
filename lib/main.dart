@@ -20,17 +20,14 @@ class _MyAppState extends State<MyApp> {
       providers: [
         Provider.value(value: _counterModel),
         StreamProvider(
+          initialData: CounterModel.defaultState,
           builder: (BuildContext context) {
             return _counterModel.getCount();
           },
         ),
       ],
-      child: Consumer<Counter>(
-        builder: (context, counter, _) {
-          return MaterialApp(
-            home: const MyHomePage(),
-          );
-        },
+      child: MaterialApp(
+        home: const MyHomePage(),
       ),
     );
   }
@@ -54,8 +51,9 @@ class IncrementCounterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final counter = Provider.of<CounterModel>(context, listen: false);
     return FloatingActionButton(
-      onPressed: Provider.of<CounterModel>(context).increment,
+      onPressed: counter.increment,
       tooltip: 'Increment',
       child: const Icon(Icons.add),
     );
