@@ -1,4 +1,4 @@
-# counter
+# Counter App
 
 Simple Counter App using behaviors.
 
