@@ -11,8 +11,9 @@ class CounterBloc implements BlocBase {
 
   CounterBloc() {
     _counterEventSubject.listen((event) {
+      final current = _counterStateSubject.value;
       if (event == CounterEvent.increment) {
-        _counterStateSubject.add(_counterStateSubject.value.increment());
+        _counterStateSubject.add(current.copy(count: current.count + 1, isWorking: false));
       }
     });
   }
@@ -27,5 +28,5 @@ class CounterBloc implements BlocBase {
     _counterStateSubject?.close();
   }
 
-  static final defaultState = CounterState(0, false);
+  static final defaultState = CounterState(0, true);
 }

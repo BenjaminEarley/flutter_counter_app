@@ -6,11 +6,8 @@ class CounterState extends Equatable {
 
   CounterState(this.count, this.isWorking) : super([count, isWorking]);
 
-  CounterState increment() {
-    return CounterState(count + 1, isWorking);
-  }
-
-  CounterState setIsWorking(bool _isWorking) {
-    return CounterState(count, _isWorking);
-  }
+  CounterState copy({int count = null, bool isWorking = null}) => CounterState(
+        count = count ?? this.count,
+        isWorking = isWorking ?? this.isWorking,
+      );
 }

@@ -57,7 +57,7 @@ class IncrementCounterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final counter = Provider.of<CounterBloc>(context, listen: false);
+    final counter = Provider.of<CounterBloc>(context);
     return FloatingActionButton(
       onPressed: counter.increment,
       tooltip: 'Increment',
