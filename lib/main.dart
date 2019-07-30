@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:counter/model/CounterModel.dart';
 
-import 'data/Counter.dart';
+import 'bloc/counter/counter_bloc.dart';
+import 'bloc/counter/counter_state.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,16 +13,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _counterModel = CounterModel();
+  final _counterBloc = CounterBloc();
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider.value(value: _counterModel),
+        Provider.value(value: _counterBloc),
         StreamProvider(
-          initialData: CounterModel.defaultState,
+          initialData: CounterBloc.defaultState,
           builder: (BuildContext context) {
-            return _counterModel.getCount();
+            return _counterBloc.stream;
           },
         ),
       ],
@@ -30,6 +30,12 @@ class _MyAppState extends State<MyApp> {
         home: const MyHomePage(),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _counterBloc.dispose();
   }
 }
 
@@ -51,7 +57,7 @@ class IncrementCounterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final counter = Provider.of<CounterModel>(context, listen: false);
+    final counter = Provider.of<CounterBloc>(context, listen: false);
     return FloatingActionButton(
       onPressed: counter.increment,
       tooltip: 'Increment',
@@ -65,7 +71,7 @@ class CounterLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final counter = Provider.of<Counter>(context);
+    final counter = Provider.of<CounterState>(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -87,7 +93,7 @@ class Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final counter = Provider.of<Counter>(context);
+    final counter = Provider.of<CounterState>(context);
     return Text("Tapped ${counter.count} times");
   }
 }
