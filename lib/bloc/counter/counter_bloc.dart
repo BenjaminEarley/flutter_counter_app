@@ -8,7 +8,7 @@ import 'counter_state.dart';
 class CounterBloc implements BlocBase {
   final _counterEventSubject = PublishSubject<CounterEvent>();
   final _counterStateSubject = BehaviorSubject.seeded(defaultState);
-  Stream<CounterState> get stream => _counterStateSubject;
+  Observable<CounterState> get stream => _counterStateSubject.stream;
 
   CounterBloc(CounterRepository repo) {
     repo.get().then((count) {
