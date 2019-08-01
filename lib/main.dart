@@ -1,3 +1,4 @@
+import 'package:counter/repository/counter_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,15 +6,32 @@ import 'package:provider/provider.dart';
 import 'bloc/counter/counter_bloc.dart';
 import 'bloc/counter/counter_state.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(CounterApp());
 
-class MyApp extends StatefulWidget {
+class CounterApp extends StatelessWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: const CounterPage(),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
-  final _counterBloc = CounterBloc();
+class CounterPage extends StatefulWidget {
+  const CounterPage({Key key}) : super(key: key);
+
+  @override
+  _CounterPageState createState() => _CounterPageState();
+}
+
+class _CounterPageState extends State<CounterPage> {
+  CounterBloc _counterBloc;
+
+  _CounterPageState() {
+    final counterRepository = CounterRepository();
+    _counterBloc = CounterBloc(counterRepository);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -26,28 +44,11 @@ class _MyAppState extends State<MyApp> {
           },
         ),
       ],
-      child: MaterialApp(
-        home: const MyHomePage(),
+      child: Scaffold(
+        appBar: AppBar(title: const Title()),
+        body: const Center(child: CounterLabel()),
+        floatingActionButton: const IncrementCounterButton(),
       ),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _counterBloc.dispose();
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Title()),
-      body: const Center(child: CounterLabel()),
-      floatingActionButton: const IncrementCounterButton(),
     );
   }
 }

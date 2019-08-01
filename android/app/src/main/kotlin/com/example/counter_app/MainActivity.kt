@@ -1,4 +1,4 @@
-package com.example.state_playground
+package com.example.counter_app
 
 import android.os.Bundle
 
