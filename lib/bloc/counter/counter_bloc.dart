@@ -21,7 +21,7 @@ class CounterBloc implements BlocBase {
       if (event == CounterEvent.increment) {
         final newCount = current.count + 1;
         _counterStateSubject.add(current.copy(count: newCount, isLoading: false));
-        await repo.set(newCount);
+        repo.set(newCount);
       }
     });
   }
