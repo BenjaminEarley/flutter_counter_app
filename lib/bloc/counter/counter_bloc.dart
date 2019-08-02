@@ -13,21 +13,27 @@ class CounterBloc implements BlocBase {
   CounterBloc(CounterRepository repo) {
     repo.get().then((count) {
       final current = _counterStateSubject.value;
-      _counterStateSubject.add(current.copy(count: count, isLoading: false));
+      _counterStateSubject.add(current.copy(
+        count: count,
+        isLoading: false,
+      ));
     });
 
     _counterEventSubject.listen((event) async {
       final current = _counterStateSubject.value;
-      if (event == CounterEvent.increment) {
+      if (event == CounterEvent.Increment) {
         final newCount = current.count + 1;
-        _counterStateSubject.add(current.copy(count: newCount, isLoading: false));
+        _counterStateSubject.add(current.copy(
+          count: newCount,
+          isLoading: false,
+        ));
         repo.set(newCount);
       }
     });
   }
 
   void increment() {
-    _counterEventSubject.add(CounterEvent.increment);
+    _counterEventSubject.add(CounterEvent.Increment);
   }
 
   @override
@@ -36,6 +42,8 @@ class CounterBloc implements BlocBase {
     _counterStateSubject?.close();
   }
 
-  static final defaultState =
-      CounterState(count: 0, isLoading: true, error: null);
+  static final defaultState = CounterState(
+    count: 0,
+    isLoading: true,
+  );
 }
