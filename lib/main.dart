@@ -17,33 +17,14 @@ class CounterApp extends StatelessWidget {
   }
 }
 
-class CounterPage extends StatefulWidget {
+class CounterPage extends StatelessWidget {
   const CounterPage({Key key}) : super(key: key);
 
   @override
-  _CounterPageState createState() => _CounterPageState();
-}
-
-class _CounterPageState extends State<CounterPage> {
-  CounterBloc _counterBloc;
-
-  _CounterPageState() {
-    final counterRepository = CounterRepository();
-    _counterBloc = CounterBloc(counterRepository);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider.value(value: _counterBloc),
-        StreamProvider(
-          initialData: CounterBloc.defaultState,
-          builder: (BuildContext context) {
-            return _counterBloc.stream;
-          },
-        ),
-      ],
+    return Provider<CounterBloc>(
+      builder: (context) => CounterBloc(CounterRepository()),
+      dispose: (context, value) => value.dispose(),
       child: Scaffold(
         appBar: AppBar(title: const Title()),
         body: const Center(child: CounterLabel()),
@@ -72,19 +53,22 @@ class CounterLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final counter = Provider.of<CounterState>(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const Text(
-          'You have pushed the button this many times:',
-        ),
-        Text(
-          '${counter.count}',
-          style: Theme.of(context).textTheme.display1,
-        ),
-      ],
+    final counter = Provider.of<CounterBloc>(context);
+    return StreamBuilder<CounterState>(
+      stream: counter.stream,
+      builder: (context, snapshot) => Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Text(
+            'You have pushed the button this many times:',
+          ),
+          Text(
+            '${snapshot.data?.count}',
+            style: Theme.of(context).textTheme.display1,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -94,7 +78,10 @@ class Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final counter = Provider.of<CounterState>(context);
-    return Text("Tapped ${counter.count} times");
+    final counter = Provider.of<CounterBloc>(context);
+    return StreamBuilder<CounterState>(
+        stream: counter.stream,
+        builder: (context, snapshot) =>
+            Text("Tapped ${snapshot.data?.count} times"));
   }
 }
